@@ -25,17 +25,17 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
-{
-    scope.ServiceProvider.GetService<EmployeeManagementDBContext>().MigrateDB();
-}
-
+//using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+//{
+//    scope.ServiceProvider.GetService<EmployeeManagementDBContext>().MigrateDB();
+//}
+ 
 app.UseHealthChecks("/healthCheck");
 
 app.MapControllers();
