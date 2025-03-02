@@ -1,11 +1,26 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// add DBContext
+var sqlConnectionString = builder.Configuration.GetConnectionString("EmployeeManagementCN");
+builder.Services.AddDbContext<EmployeeManagementDBContext>(options => options.UseSqlServer(sqlConnectionString));
 
+// Add framework services
+builder.Services
+    .AddMvc(options => options.EnableEndpointRouting = false)
+    .AddNewtonsoftJson();
+
+// Register the Swagger generator, defining one or more Swagger documents
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerManagement API", Version = "v1" });
+});
+
+// Add health checks
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<EmployeeManagementDBContext>();
+
+// setup MVC
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -16,7 +31,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthorization();
+using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    scope.ServiceProvider.GetService<EmployeeManagementDBContext>().MigrateDB();
+}
+
+app.UseHealthChecks("/healthCheck");
 
 app.MapControllers();
 

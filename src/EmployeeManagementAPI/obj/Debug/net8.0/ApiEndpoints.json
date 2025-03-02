@@ -1,23 +1,45 @@
 [
   {
-    "ContainingType": "EmployeeManagementAPI.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
+    "ContainingType": "EmployeeManagementAPI.Controllers.EmployeeManagementController",
+    "Method": "GetAllAsync",
+    "RelativePath": "api/EmployeeManagement",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeManagementAPI.Controllers.EmployeeManagementController",
+    "Method": "RegisterAsync",
+    "RelativePath": "api/EmployeeManagement",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[EmployeeManagementAPI.WeatherForecast, EmployeeManagementAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "newEmployee",
+        "Type": "EmployeeManagementAPI.Model.Employee",
+        "IsRequired": true
       }
     ],
-    "EndpointName": "GetWeatherForecast"
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EmployeeManagementAPI.Controllers.EmployeeManagementController",
+    "Method": "GetByEmployeeId",
+    "RelativePath": "api/EmployeeManagement/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [],
+    "EndpointName": "GetByEmployeeId"
   }
 ]
