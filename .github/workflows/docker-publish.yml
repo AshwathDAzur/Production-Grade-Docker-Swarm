@@ -1,9 +1,9 @@
 name: Build and Push Docker Images
 
 on:
-  push:
-    branches:
-      - main  # Change this to your default or desired branch
+  release:
+    types: [published]
+    
 jobs:
 
   build-api:
