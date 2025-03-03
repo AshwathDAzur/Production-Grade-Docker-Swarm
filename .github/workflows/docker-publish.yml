@@ -1,9 +1,9 @@
 name: Build and Push Docker Images
 
 on:
-  release:
-    types: [published]
-
+  push:
+    branches:
+      - main  # Change this to your default or desired branch
 jobs:
 
   build-api:
@@ -25,8 +25,8 @@ jobs:
 
       - name: Build and Push API Docker Image
         run: |
-          docker build -f ./src/EmployeeManagementAPI/Dockerfile -t ghcr.io/AshwathDAzur/employeemanagement-api:$TAG ./src/EmployeeManagementAPI
-          docker push ghcr.io/AshwathDAzur/employeemanagement-api:$TAG
+          docker build -f ./src/EmployeeManagementAPI/Dockerfile -t ghcr.io/ashwathdazur/employeemanagement-api:$TAG ./src/EmployeeManagementAPI
+          docker push ghcr.io/ashwathdazur/employeemanagement-api:$TAG
 
   build-webapp:
     runs-on: ubuntu-latest
@@ -47,5 +47,5 @@ jobs:
 
       - name: Build and Push WebApp Docker Image
         run: |
-          docker build -f ./src/webapp/Dockerfile -t ghcr.io/AshwathDAzur/employeemanagement-webapp:$TAG ./src/webapp
-          docker push ghcr.io/AshwathDAzur/employeemanagement-webapp:$TAG
+          docker build -f ./src/webapp/Dockerfile -t ghcr.io/ashwathdazur/employeemanagement-webapp:$TAG ./src/webapp
+          docker push ghcr.io/ashwathdazur/employeemanagement-webapp:$TAG
