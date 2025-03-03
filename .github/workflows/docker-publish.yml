@@ -26,7 +26,7 @@ jobs:
       - name: Build and Push API Docker Image
         run: |
           docker build -f ./src/EmployeeManagementAPI/Dockerfile -t ghcr.io/AshwathDAzur/employeemanagement-api:$TAG ./src/EmployeeManagementAPI
-          docker push ghcr.io/mascom-wireless/employeemanagement-api:$TAG
+          docker push ghcr.io/AshwathDAzur/employeemanagement-api:$TAG
 
   build-webapp:
     runs-on: ubuntu-latest
@@ -48,4 +48,4 @@ jobs:
       - name: Build and Push WebApp Docker Image
         run: |
           docker build -f ./src/webapp/Dockerfile -t ghcr.io/AshwathDAzur/employeemanagement-webapp:$TAG ./src/webapp
-          docker push ghcr.io/mascom-wireless/employeemanagement-webapp:$TAG
+          docker push ghcr.io/AshwathDAzur/employeemanagement-webapp:$TAG
