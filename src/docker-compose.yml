@@ -1,0 +1,35 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    container_name: sqlserver
+    volumes:
+      - sqldata:/var/opt/mssql
+    ports:
+      - "1434:1433"
+    env_file:
+      - .env.prod
+
+  employeemanagementapi:
+    image: ghcr.io/ashwathdazur/employeemanagement-api:v1.1.0
+    build: employeemanagementapi
+    depends_on:
+      - sqlserver
+    ports:
+      - "5087:5087"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    env_file:
+      - .env.prod
+     
+  webapp:
+    image: ghcr.io/ashwathdazur/employeemanagement-webapp:v1.1.0
+    build: WebApp
+    container_name: webapp
+    depends_on:
+      - employeemanagementapi
+    ports:
+      - "2407:2407"
+
+volumes:
+  sqldata:
+    external: true
