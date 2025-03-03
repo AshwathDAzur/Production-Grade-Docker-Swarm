@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllEmployees, createNewEmployee } from "../../services/api";
-import serverdown from "../../assets/serverdown.png";
+import serverdown from "../../assets/serverDown.png";
 import {
     Grid, Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow, TextField, Button, Typography, Card
