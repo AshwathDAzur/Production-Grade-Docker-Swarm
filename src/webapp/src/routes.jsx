@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import routes from './constant/routes.json';
 import AppLayout from './container/applayout';
+import PageNotFound from './container/pagenotfound';
 
 function AppRouter() {
     return (
@@ -11,7 +12,10 @@ function AppRouter() {
                     <AppLayout screen={<div>Ashwath</div>} />
                 }
             />
-            <Route path="*" element={<div>Page Not Found</div>} />
+            <Route path="*" element={
+                <AppLayout screen={<PageNotFound />} />
+            }
+            />
         </Routes>
     );
 }
