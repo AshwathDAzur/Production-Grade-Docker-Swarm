@@ -1,0 +1,51 @@
+name: Build and Push Docker Images
+
+on:
+  release:
+    types: [published]
+
+jobs:
+
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PERSONALAT }}
+
+      - name: Extract Release Tag
+        id: get_tag
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Build and Push API Docker Image
+        run: |
+          docker build -f ./src/EmployeeManagementAPI/Dockerfile -t ghcr.io/AshwathDAzur/employeemanagement-api:$TAG ./src/EmployeeManagementAPI
+          docker push ghcr.io/mascom-wireless/employeemanagement-api:$TAG
+
+  build-webapp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PERSONALAT }}
+
+      - name: Extract Release Tag
+        id: get_tag
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Build and Push WebApp Docker Image
+        run: |
+          docker build -f ./src/webapp/Dockerfile -t ghcr.io/AshwathDAzur/employeemanagement-webapp:$TAG ./src/webapp
+          docker push ghcr.io/mascom-wireless/employeemanagement-webapp:$TAG
