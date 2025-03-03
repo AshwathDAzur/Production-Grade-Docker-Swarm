@@ -1,5 +1,17 @@
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 // add DBContext
 var sqlConnectionString = builder.Configuration.GetConnectionString("EmployeeManagementCN");
 builder.Services.AddDbContext<EmployeeManagementDBContext>(options => options.UseSqlServer(sqlConnectionString));
@@ -31,11 +43,14 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwaggerUI();
 }
 
+// Enable CORS before middleware that uses it
+app.UseCors("AllowAll");
+
 //using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 //{
 //    scope.ServiceProvider.GetService<EmployeeManagementDBContext>().MigrateDB();
 //}
- 
+
 app.UseHealthChecks("/healthCheck");
 
 app.MapControllers();
