@@ -1,0 +1,35 @@
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: sqlserver
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+    ports:
+      - "1434:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Developer
+      - SA_PASSWORD=A2s4H0w7a2T0h00
+  employeemanagementapi:
+    image: ghcr.io/ashwathdazur/employeemanagement-api:v1.1
+    build: employeemanagementapi
+    depends_on:
+      - sqlserver
+    ports:
+      - "5087:5087"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__EmployeeManagementCN=server=sqlserver;user id=sa;password=A2s4H0w7a2T0h00;database=EmployeeManagementSystem;trustServerCertificate=true
+  webapp:
+    image: ghcr.io/ashwathdazur/employeemanagement-webapp:v1.1
+    build: WebApp
+    container_name: webapp
+    depends_on:
+      - employeemanagementapi
+    ports:
+      - "2407:2407"
+
+volumes:
+  sqlserverdata:
+    external: true

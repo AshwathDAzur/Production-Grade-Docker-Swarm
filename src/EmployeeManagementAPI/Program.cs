@@ -46,10 +46,10 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 // Enable CORS before middleware that uses it
 app.UseCors("AllowAll");
 
-//using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
-//{
-//    scope.ServiceProvider.GetService<EmployeeManagementDBContext>().MigrateDB();
-//}
+using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+   scope.ServiceProvider.GetService<EmployeeManagementDBContext>().MigrateDB();
+}
 
 app.UseHealthChecks("/healthCheck");
 
