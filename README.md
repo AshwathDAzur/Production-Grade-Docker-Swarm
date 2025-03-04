@@ -28,6 +28,10 @@ Although the application itself is minimal in terms of features, it serves as a 
 
 Throughout the development, I have incorporated industry best practices, making this project a complete learning package—from foundational concepts to practical implementation. This initiative not only showcases containerization but also provides a structured approach to mastering deployment in real-world production environments.
 
+![Alt text](/client.png)
+
+![Alt text](/server.png)
+
 ## Setting Up Docker Swarm Cluster 
 
 ### Pre-requisites 
