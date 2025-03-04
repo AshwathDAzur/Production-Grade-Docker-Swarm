@@ -29,6 +29,8 @@ services:
       - employeemanagementapi
     ports:
       - "2407:2407"
+    env_file:
+      - .env.prod
 
 volumes:
   sqldata:
