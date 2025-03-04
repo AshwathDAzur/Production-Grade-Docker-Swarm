@@ -20,6 +20,14 @@ Key features of Docker Swarm in this setup:
 
 Deploying the application on Docker Swarm was a strategic choice, as it is well-suited for monolithic architectures, offering simplicity, built-in orchestration, and efficient resource management. Unlike Kubernetes, which introduces additional complexities for a three-tier application, Docker Swarm provides a straightforward and lightweight orchestration solution, making it an ideal fit for on-premises setup.
 
+## About the application
+
+The Employee Management System is built using .NET Core Web API 8, React, and SQL Server. It follows a simple monolithic architecture and primarily focuses on basic CRUD (Create, Read, Update, Delete) operations. The primary purpose of this project is to demonstrate how to containerize an application using GitHub Actions and deploy it on a bare-metal, on-premises environment.
+
+Although the application itself is minimal in terms of features, it serves as a comprehensive learning resource for understanding containerization, deployment pipelines, and production-level deployment strategies. By working through this project, we gain hands-on experience with the underlying architecture, best practices for developing containerized applications, and the end-to-end deployment process. 
+
+Throughout the development, I have incorporated industry best practices, making this project a complete learning package—from foundational concepts to practical implementation. This initiative not only showcases containerization but also provides a structured approach to mastering deployment in real-world production environments.
+
 ## Setting Up Docker Swarm Cluster 
 
 ### Pre-requisites 
@@ -42,3 +50,10 @@ In the repository, there is a folder named `swarmdeployment`, which contains a `
 To execute the deployment, simply run the PowerShell (`swarmdeployment.ps1`) script provided in the `scripts` folder. As the script runs, observe the output to understand the deployment process and ensure that everything is set up correctly.
 
 Once the deployment is complete, use your system’s IP address to access the application. A reverse proxy has already been configured to handle internal routing, directing requests to the appropriate services within the Swarm cluster. The proxy listens on port `80`, so you can access the application without specifying a port number in the URL.
+
+![Alt text](/swarmsetup.png)
+
+![Alt text](/createvolume.png)
+
+![Alt text](/deployment.png)
+
