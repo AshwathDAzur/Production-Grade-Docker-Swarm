@@ -1,0 +1,150 @@
+version: '3.8'
+
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    volumes:
+      - employeedata:/var/opt/mssql
+    ports:
+      - "1434:1433"
+    env_file:
+      - .env.prod
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "2"
+          memory: "4G"
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+          test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -U sa -P 'A2s4H0w7a2T0h00' -Q 'SELECT 1' -C || exit 1" ]
+          interval: 10s
+          timeout: 10s
+          retries: 3
+    networks:
+      - employee-network
+
+  employeeserver:
+    image: ghcr.io/ashwathdazur/employeemanagement-api:v1.1.0
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    env_file:
+      - .env.prod
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1G"
+      restart_policy:
+        condition: any
+      update_config:
+        failure_action: rollback
+    depends_on:
+      - sqlserver
+    networks:
+      - employee-network
+
+  employeeclient:
+    image: ghcr.io/ashwathdazur/employeemanagement-webapp:v1.1.0
+    stdin_open: true
+    tty: true
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "1"
+          memory: "2G"
+      restart_policy:
+        condition: on-failure
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=2048 # Set Node.js memory allocation
+    env_file:
+      - .env.prod
+    depends_on:
+      - sqlserver
+    networks:
+      - employee-network
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80" # Expose NGINX on port 80
+    depends_on:
+      - employeeserver
+      - employeeclient
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - employee-network
+  
+  node-exporter:
+    image: prom/node-exporter:latest
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - --path.procfs=/host/proc
+      - --path.rootfs=/rootfs
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+    ports:
+      - 9100:9100
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+    networks:
+      - employee-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - prometheus_data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.console.libraries=/etc/prometheus/console_libraries
+      - --web.console.templates=/etc/prometheus/consoles
+      - --web.enable-lifecycle
+    ports:
+      - 9090:9090
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - employee-network
+
+  grafana:
+    image: grafana/grafana-enterprise
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana_storage:/var/lib/grafana
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - employee-network
+
+volumes:
+  employeedata:
+    external: true
+  prometheus_data: 
+    external: true
+  grafana_storage: 
+    external: true
+
+networks:
+  employee-network:
+    driver: overlay
