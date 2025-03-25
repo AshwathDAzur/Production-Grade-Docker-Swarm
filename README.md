@@ -53,7 +53,7 @@ In the repository, there is a folder named `swarmdeployment`, which contains a `
 
 To execute the deployment, simply run the PowerShell (`swarmdeployment.ps1`) script provided in the `scripts` folder. As the script runs, observe the output to understand the deployment process and ensure that everything is set up correctly.
 
-Once the deployment is complete, use your system’s IP address to access the application. A reverse proxy has already been configured to handle internal routing, directing requests to the appropriate services within the Swarm cluster. The proxy listens on port `80`, so you can access the application without specifying a port number in the URL.
+Once the deployment is complete, use your system’s IP address to access the application. A reverse proxy has already been configured to handle internal routing, directing requests to the appropriate services within the Swarm cluster. The proxy listens on port `80`, so we can access the application without specifying a port number in the URL.
 
 ![Alt text](/swarmsetup.png)
 
